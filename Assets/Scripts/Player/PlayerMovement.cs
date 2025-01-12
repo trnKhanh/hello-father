@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    bool inputActive = true;
 
     Vector3 moveDirection;
 
@@ -72,6 +73,38 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // >>> TODO: REMOVE THIS
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SetInputActive(false);
+            List<DialogManager.Dialog> dialogs = new List<DialogManager.Dialog>
+            {
+                new DialogManager.Dialog
+                {
+                    character = DialogManager.Character.MainCharacter,
+                    text = "Hi there.",
+                    sound = null,
+                },
+                new DialogManager.Dialog
+                {
+                    character = DialogManager.Character.MainCharacter,
+                    text = "Hi there. This is me. This is me. Hehehehehehehehehehehehehehehehehehehehehehehehe",
+                    sound = null,
+                }
+            };
+            DialogManager.Instance.PlayDialogs(
+                dialogs,
+                (int dialogId) =>
+                {
+                    if (dialogId == dialogs.Count - 1)
+                    {
+                        SetInputActive(true);
+                    }
+                }
+            );
+        }
+        // <<< TODO: REMOVE THIS
+
         UpdateGroundCheck();
         UpdateInput();
         SpeedControl();
@@ -95,8 +128,19 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = 0;
     }
 
+    void SetInputActive(bool active)
+    {
+        inputActive = active;
+    }
+
     void UpdateInput()
     {
+        if (!inputActive)
+        {
+            horizontalInput = verticalInput = 0;
+            return;
+        }
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
@@ -231,7 +275,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f))
         {
-            Debug.Log("On slope");
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
         }
