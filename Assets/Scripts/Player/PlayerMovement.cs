@@ -46,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    Animator animator;
+    string k_moving = "Moving";
+    string k_sprinting = "Sprinting";
+    string k_air = "Air";
+
     public MovementState currentState;
     public enum MovementState
     {
@@ -60,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        animator = GetComponent<Animator>();
+
         startYScale = transform.localScale.y;
     }
 
@@ -69,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         UpdateInput();
         SpeedControl();
         MovementStateHanlder();
+        UpdateAnimation();
     }
 
     void FixedUpdate()
@@ -79,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateGroundCheck()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundMask);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.1f, groundMask);
 
         if (grounded)
             rb.drag = groundDrag;
@@ -131,6 +139,34 @@ public class PlayerMovement : MonoBehaviour
         } else
         {
             currentState = MovementState.Air;
+        }
+    }
+
+    void UpdateAnimation()
+    {
+        if (grounded)
+        {
+            animator.SetBool(k_air, false);
+            bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
+
+            if (wantToMove)
+            {
+                animator.SetBool(k_moving, true);
+                if (Input.GetKey(sprintKey))
+                    animator.SetBool(k_sprinting, true);
+                else
+                    animator.SetBool(k_sprinting, false);
+            }
+            else
+            {
+                animator.SetBool(k_moving, false);
+                animator.SetBool(k_sprinting, false);
+            }
+        } else
+        {
+            animator.SetBool(k_sprinting, false);
+            animator.SetBool(k_moving, false);
+            animator.SetBool(k_air, true);
         }
     }
 
@@ -193,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f))
         {
             Debug.Log("On slope");
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
