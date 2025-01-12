@@ -134,41 +134,13 @@ GameObject:
   - component: {fileID: 56394349}
   - component: {fileID: 56394348}
   - component: {fileID: 56394347}
-  - component: {fileID: 56394346}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &56394346
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56394345}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!65 &56394347
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -248,13 +220,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56394345}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.45, y: 4.2131753, z: -0.704}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.29237393, w: 0.9563041}
+  m_LocalPosition: {x: -6.4069, y: 4.0348, z: -4.2958}
+  m_LocalScale: {x: 15.4112015, y: 0.18782, z: 8.183591}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -34}
 --- !u!1 &103330913
 GameObject:
   m_ObjectHideFlags: 3
@@ -2092,17 +2064,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c8c44624c0ec4fd28ed939dfcb5b6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7
+  walkSpeed: 5
+  sprintSpeed: 7
   groundDrag: 5
   jumpForce: 12
   jumpCooldown: 0.25
   airMultiplier: 0.4
+  crouchSpeed: 3
+  crouchYScale: 0.5
   jumpKey: 32
+  sprintKey: 304
+  crouchKey: 99
   playerHeight: 1
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  maxSlopeAngle: 40
   orientation: {fileID: 171022219}
+  currentState: 0
 --- !u!1 &1081423033
 GameObject:
   m_ObjectHideFlags: 3
@@ -3185,7 +3164,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009346555}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.23454405, y: -0.0000000144855035, z: -0.0000000034949792, w: 0.97210556}
+  m_LocalRotation: {x: -0.23454402, y: 0.0000000144947725, z: 0.0000000034972152, w: 0.97210556}
   m_LocalPosition: {x: -1.9113457, y: 0.7258264, z: -9.122082}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
