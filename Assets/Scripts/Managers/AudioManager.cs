@@ -21,6 +21,7 @@ public class AudioManager : MonoBehaviour
         Cancle,
         Achievement,
         End,
+        TurnPage,
     }
 
     [Serializable]
@@ -82,6 +83,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(SFXState state)
     {
+        Debug.Log(state);
         AudioClip audioClip = GetSFXAudioClip(state);
         sfxAudioSource.PlayOneShot(audioClip);
     }

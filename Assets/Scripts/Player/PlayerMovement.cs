@@ -4,48 +4,35 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Gravity")]
+    public float gravity = -9.8f;
+    public bool useGravity = true;
+    Vector3 gravityVelocity;
+
     [Header("Movement")]
-    float movementSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float groundDrag;
+    float movementSpeed;
 
     [Header("Jumping")]
-    public float jumpForce;
+    public float jumpHeight;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump = true;
 
-    [Header("Crouching")]
-    public float crouchSpeed;
-    public float crouchYScale;
-    float startYScale;
-
-    [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
-    public KeyCode crouchKey = KeyCode.C;
-
-    [Header("Ground Check")]
-    public float playerHeight;
-    public LayerMask groundMask;
-    bool grounded;
-
-    [Header("Slope Handling")]
-    public float maxSlopeAngle;
-    RaycastHit slopeHit;
-    bool exitingSlope;
+    [Header("Ground Checking")]
+    bool isGrounded;
 
     [Header("References")]
     public Transform orientation;
 
     float horizontalInput;
     float verticalInput;
-    bool inputActive = true;
 
     Vector3 moveDirection;
 
-    Rigidbody rb;
+    CharacterController characterController;
 
     Animator animator;
     string k_moving = "Moving";
@@ -63,20 +50,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-
+        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
-        startYScale = transform.localScale.y;
     }
 
     void Update()
     {
         // >>> TODO: REMOVE THIS
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            SetInputActive(false);
+            InputManager.Instance.active = false;
             List<DialogManager.Dialog> dialogs = new List<DialogManager.Dialog>
             {
                 new DialogManager.Dialog
@@ -98,97 +81,79 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (dialogId == dialogs.Count - 1)
                     {
-                        SetInputActive(true);
+                        InputManager.Instance.active = true;
                     }
                 }
             );
         }
         // <<< TODO: REMOVE THIS
 
-        UpdateGroundCheck();
-        UpdateInput();
-        SpeedControl();
-        MovementStateHanlder();
+        GroundChecking();
+        UpdateMovementState();
+        MovePlayer();
+        UpdateGravity();
         UpdateAnimation();
     }
 
-    void FixedUpdate()
+    void GroundChecking()
     {
-
-        MovePlayer();    
+        isGrounded = characterController.isGrounded;
     }
 
-    void UpdateGroundCheck()
+    void UpdateMovementState()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.1f, groundMask);
+        verticalInput = InputManager.Instance.verticalInput;
+        horizontalInput = InputManager.Instance.horizontalInput;
 
-        if (grounded)
-            rb.drag = groundDrag;
-        else
-            rb.drag = 0;
-    }
-
-    void SetInputActive(bool active)
-    {
-        inputActive = active;
-    }
-
-    void UpdateInput()
-    {
-        if (!inputActive)
+        if (isGrounded)
         {
-            horizontalInput = verticalInput = 0;
-            return;
-        }
-
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
-        {
-            readyToJump = false;
-
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-
-        if (Input.GetKeyDown(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
-
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-        }
-    }
-
-    void MovementStateHanlder()
-    {
-        if (Input.GetKey(crouchKey))
-        {
-            currentState = MovementState.Crouching;
-            movementSpeed = crouchSpeed;
-        }
-        else if (grounded && Input.GetKey(sprintKey))
-        {
-            currentState = MovementState.Sprinting;
-            movementSpeed = sprintSpeed;
-        } else if (grounded)
-        {
-            currentState = MovementState.Walking;
-            movementSpeed = walkSpeed;
+            if (InputManager.Instance.sprint)
+            {
+                currentState = MovementState.Sprinting;
+                movementSpeed = sprintSpeed;
+            } else
+            {
+                currentState = MovementState.Walking;
+                movementSpeed = walkSpeed;
+            }
         } else
         {
             currentState = MovementState.Air;
         }
     }
 
+    void MovePlayer()
+    {
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        moveDirection = moveDirection.normalized;
+        if (isGrounded)
+        {
+            characterController.Move(moveDirection * movementSpeed * Time.deltaTime);
+        } else
+        {
+            characterController.Move(moveDirection * movementSpeed * airMultiplier * Time.deltaTime);
+        }
+
+        if (InputManager.Instance.jump && isGrounded)
+        {
+            Jump();
+        }
+    }
+
+    void UpdateGravity()
+    {
+        if (isGrounded && gravityVelocity.y < 0)
+            gravityVelocity.y = -2.0f;
+
+        if (useGravity)
+            gravityVelocity.y += gravity * Time.deltaTime;
+
+        characterController.Move(gravityVelocity * Time.deltaTime);
+    }
+
     void UpdateAnimation()
     {
-        if (grounded)
+        if (isGrounded)
         {
             animator.SetBool(k_air, false);
             bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
@@ -196,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
             if (wantToMove)
             {
                 animator.SetBool(k_moving, true);
-                if (Input.GetKey(sprintKey))
+                if (InputManager.Instance.sprint)
                     animator.SetBool(k_sprinting, true);
                 else
                     animator.SetBool(k_sprinting, false);
@@ -214,76 +179,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void MovePlayer()
-    {
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-        if  (OnSlope())
-        {
-            rb.AddForce(GetSlopeMoveDirection() * movementSpeed * 20f, ForceMode.Force);
-            if (rb.velocity.y > 0)
-            {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-            }
-        }
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * movementSpeed * 10f, ForceMode.Force);
-        else
-            rb.AddForce(moveDirection.normalized * movementSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        rb.useGravity = !OnSlope();
-    }
-
-    void SpeedControl()
-    {
-        if (OnSlope() && !exitingSlope)
-        {
-            if (rb.velocity.magnitude > movementSpeed)
-            {
-                rb.velocity = rb.velocity.normalized * movementSpeed;
-            }
-        }
-        else
-        {
-            Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            if (flatVelocity.magnitude > movementSpeed)
-            {
-                Vector3 limitedVelocity = flatVelocity.normalized * movementSpeed;
-                rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
-            }
-        }
-    }
-
     void Jump()
     {
-        exitingSlope = true;
-
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        gravityVelocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
+        Invoke(nameof(ResetJump), jumpCooldown);
     }
 
     void ResetJump()
     {
         readyToJump = true;
-
-        exitingSlope = false;
-    }
-
-    bool OnSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f))
-        {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-
-        return false;
-    }
-
-    Vector3 GetSlopeMoveDirection()
-    {
-        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 }

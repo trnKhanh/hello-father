@@ -25,12 +25,6 @@ public class ThirdPersonCameraController : MonoBehaviour
         Combat
     }
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     void Update()
     {
         if (currentStyle == CameraStyle.Basic)
@@ -40,8 +34,8 @@ public class ThirdPersonCameraController : MonoBehaviour
             orientation.forward = viewDirection.normalized;
 
             // Obtain the input and calculate the input direction
-            float verticalInput = Input.GetAxis("Vertical");
-            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = InputManager.Instance.verticalInput;
+            float horizontalInput = InputManager.Instance.horizontalInput;
             Vector3 inputDirection = verticalInput * orientation.forward + horizontalInput * orientation.right;
 
             // Rotate player based on inputs
