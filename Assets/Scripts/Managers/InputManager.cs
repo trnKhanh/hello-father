@@ -7,14 +7,18 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
-    [Header("Keybinds")]
+    [Header("Control Keybinds")]
     public KeyCode[] jumpKeys;
     public KeyCode[] interactKeys;
     public KeyCode[] sprintKeys;
     public KeyCode[] crouchKeys;
 
+    [Header("UI Keybinds")]
+    public KeyCode[] escapeKeys;
 
-    public bool active = true;
+
+    public bool controlActive = true;
+    public bool UIActive = true;
     public float verticalInput { get; private set; }
     public float horizontalInput { get; private set; }
 
@@ -25,6 +29,7 @@ public class InputManager : MonoBehaviour
     public bool interact { get; private set; }
     public bool sprint { get; private set; }
     public bool crouch { get; private set; }
+    public bool escape { get; private set; }
 
     private void Awake()
     {
@@ -38,7 +43,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (active)
+        if (controlActive)
         {
             verticalInput = Input.GetAxis("Vertical");
             horizontalInput = Input.GetAxis("Horizontal");
@@ -85,6 +90,8 @@ public class InputManager : MonoBehaviour
                     break;
                 }
             }
+
+
         }
         else
         {
@@ -99,11 +106,27 @@ public class InputManager : MonoBehaviour
             sprint = false;
             crouch = false;
         }
+
+        if (UIActive)
+        {
+            escape = false;
+            foreach (KeyCode key in escapeKeys)
+            {
+                if (Input.GetKeyDown(key))
+                {
+                    escape = true;
+                    break;
+                }
+            }
+        } else
+        {
+            escape = false;
+        }
     }
 
     public KeyCode InteractKey()
     {
-        if (active && interactKeys.Length > 0)
+        if (controlActive && interactKeys.Length > 0)
             return interactKeys[0];
         else
             return KeyCode.None;
@@ -111,7 +134,7 @@ public class InputManager : MonoBehaviour
 
     public KeyCode JumpKey()
     {
-        if (active && jumpKeys.Length > 0)
+        if (controlActive && jumpKeys.Length > 0)
             return jumpKeys[0];
         else
             return KeyCode.None;
@@ -119,7 +142,7 @@ public class InputManager : MonoBehaviour
 
     public KeyCode SprintKey()
     {
-        if (active && sprintKeys.Length > 0)
+        if (controlActive && sprintKeys.Length > 0)
             return sprintKeys[0];
         else
             return KeyCode.None;
@@ -127,8 +150,16 @@ public class InputManager : MonoBehaviour
 
     public KeyCode CrouchKey()
     {
-        if (active && crouchKeys.Length > 0)
+        if (controlActive && crouchKeys.Length > 0)
             return crouchKeys[0];
+        else
+            return KeyCode.None;
+    }
+
+    public KeyCode EscapeKey()
+    {
+        if (UIActive && escapeKeys.Length > 0)
+            return escapeKeys[0];
         else
             return KeyCode.None;
     }

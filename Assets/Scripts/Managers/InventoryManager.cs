@@ -6,7 +6,7 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
 
-    HashSet<Key> currentKeys = new HashSet<Key>();
+    HashSet<PickupItem> currentKeys = new HashSet<PickupItem>();
 
     private void Awake()
     {
@@ -18,22 +18,24 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
     }
 
-    public void ObtainKey(Key key)
+    public void ObtainKey(PickupItem key)
     {
         currentKeys.Add(key);
+
+        InventoryHUDManager.Instance.AddNewItem(key);
     }
 
-    public bool HasKey(Key key)
+    public bool HasKey(PickupItem key)
     {
         return currentKeys.Contains(key);
     }
 
-    public bool HasAnyKey(Key[] keys)
+    public bool HasAnyKey(PickupItem[] keys)
     {
         if (keys.Length == 0)
             return true;
 
-        foreach (Key key in keys)
+        foreach (PickupItem key in keys)
         {
             if (currentKeys.Contains(key))
                 return true;

@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         // >>> TODO: REMOVE THIS
         if (Input.GetKeyDown(KeyCode.F))
         {
-            InputManager.Instance.active = false;
+            InputManager.Instance.controlActive = false;
             List<DialogManager.Dialog> dialogs = new List<DialogManager.Dialog>
             {
                 new DialogManager.Dialog
@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (dialogId == dialogs.Count - 1)
                     {
-                        InputManager.Instance.active = true;
+                        InputManager.Instance.controlActive = true;
                     }
                 }
             );

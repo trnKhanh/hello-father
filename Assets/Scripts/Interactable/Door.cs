@@ -10,7 +10,7 @@ public class Door : MonoBehaviour, IInteractable
     public AudioClip lockedSFX;
 
     [Header("Key")]
-    public Key[] requiredKeys;
+    public PickupItem[] requiredKeys;
 
     bool isClosed = true;
 

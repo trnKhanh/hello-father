@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    List<GameObject> interactableObjects = new List<GameObject>();
+    HashSet<GameObject> interactableObjects = new HashSet<GameObject>();
 
     void Update()
     {
@@ -33,6 +33,12 @@ public class PlayerController : MonoBehaviour
     GameObject ClosestInteractableObject()
     {
         GameObject closestGameObject = null;
+
+        interactableObjects.RemoveWhere((gameObject) =>
+        {
+            return gameObject == null;
+        });
+
         foreach (GameObject obj in interactableObjects)
         {
             if (closestGameObject == null)
