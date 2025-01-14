@@ -26,6 +26,6 @@ public class InventoryHUDManager : MonoBehaviour
     {
         GameObject obj = Instantiate(itemUIPrefab, itemListPanel);
 
-        obj.GetComponent<PickupItemUI>().SetUI(item.icon, item.name);
+        obj.GetComponent<PickupItemUI>().SetUI(item.itemIcon, item.itemName);
     }
 }

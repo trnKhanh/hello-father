@@ -38,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
     string k_moving = "Moving";
     string k_sprinting = "Sprinting";
     string k_air = "Air";
+    string k_speedX = "SpeedX";
+    string k_speedZ = "SpeedZ";
 
     public MovementState currentState;
     public enum MovementState
@@ -155,27 +157,29 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
-            animator.SetBool(k_air, false);
-            bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
+            animator.SetFloat(k_speedX, horizontalInput, 0.1f, Time.deltaTime);
+            animator.SetFloat(k_speedZ, verticalInput, 0.1f, Time.deltaTime);
+            //animator.SetBool(k_air, false);
+            //bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
 
-            if (wantToMove)
-            {
-                animator.SetBool(k_moving, true);
-                if (InputManager.Instance.sprint)
-                    animator.SetBool(k_sprinting, true);
-                else
-                    animator.SetBool(k_sprinting, false);
-            }
-            else
-            {
-                animator.SetBool(k_moving, false);
-                animator.SetBool(k_sprinting, false);
-            }
+            //if (wantToMove)
+            //{
+            //    animator.SetBool(k_moving, true);
+            //    if (InputManager.Instance.sprint)
+            //        animator.SetBool(k_sprinting, true);
+            //    else
+            //        animator.SetBool(k_sprinting, false);
+            //}
+            //else
+            //{
+            //    animator.SetBool(k_moving, false);
+            //    animator.SetBool(k_sprinting, false);
+            //}
         } else
         {
-            animator.SetBool(k_sprinting, false);
-            animator.SetBool(k_moving, false);
-            animator.SetBool(k_air, true);
+            //animator.SetBool(k_sprinting, false);
+            //animator.SetBool(k_moving, false);
+            //animator.SetBool(k_air, true);
         }
     }
 

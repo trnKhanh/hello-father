@@ -5,8 +5,8 @@ using UnityEngine;
 public class PickupItem : MonoBehaviour, IInteractable
 {
     [Header("Icon and Name")]
-    public Sprite icon;
-    public string name;
+    public Sprite itemIcon;
+    public string itemName;
 
     public void Interact()
     {

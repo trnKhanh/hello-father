@@ -114,14 +114,14 @@ public class ReadingManager : MonoBehaviour
     {
         canvas.gameObject.SetActive(true);
         Time.timeScale = 0;
-        CursorManager.Instance.UnlockCursor();
+        ControlManager.Instance.UnlockCursor();
     }
 
     void Hide()
     {
         canvas.gameObject.SetActive(false);
         Time.timeScale = 1;
-        CursorManager.Instance.LockCursor();
+        ControlManager.Instance.LockCursor();
     }
 
 }
