@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementTest : MonoBehaviour
 {
     [SerializeField]
     private Camera Camera;
