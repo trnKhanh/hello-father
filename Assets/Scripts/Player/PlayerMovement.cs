@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     string k_air = "Air";
     string k_speedX = "SpeedX";
     string k_speedZ = "SpeedZ";
+    string k_jump = "Jump";
 
     public MovementState currentState;
     public enum MovementState
@@ -157,8 +158,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
-            animator.SetFloat(k_speedX, horizontalInput, 0.1f, Time.deltaTime);
-            animator.SetFloat(k_speedZ, verticalInput, 0.1f, Time.deltaTime);
+            animator.SetFloat(k_speedX, InputManager.Instance.horizontalInputRaw, 0.1f, Time.deltaTime);
+            animator.SetFloat(k_speedZ, InputManager.Instance.verticalInputRaw, 0.1f, Time.deltaTime);
+
+            animator.SetBool(k_sprinting, InputManager.Instance.sprint);
             //animator.SetBool(k_air, false);
             //bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
 
@@ -187,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
     {
         gravityVelocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
         Invoke(nameof(ResetJump), jumpCooldown);
+        animator.SetTrigger(k_jump);
     }
 
     void ResetJump()
