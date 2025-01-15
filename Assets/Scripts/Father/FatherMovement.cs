@@ -15,11 +15,12 @@ public class FatherMovement : MonoBehaviour
 
     private int CurrentCheckpointIndex = 0;
     private float CatchedThreshold = 5f;
-    private float IdleTimeAtCheckpoint = 5f;
+    private float IdleTimeAtCheckpoint = Random.Range(0, 5);
     private NavMeshAgent Agent;
     private Animator Animator;
 
     private bool IsIdle = false;
+    private bool IsChasing = false;
     private float IdleTimer = 0f;
 
     private void Awake()
@@ -36,16 +37,18 @@ public class FatherMovement : MonoBehaviour
         {
             Animator.SetBool("IsCatched", true);
             Agent.ResetPath();
+            return;
         }
         else
         {
-            Animator.SetBool("IsCatched", false);
             if (ShouldChase())
             {
                 Debug.Log("COMMING............");
                 Agent.SetDestination(Target.position);
-                Animator.SetBool("IsIdle", false);
                 IsIdle = false;
+                IsChasing = true;
+                Animator.SetBool("IsIdle", IsIdle);
+                Animator.SetBool("IsChasing", IsChasing);
             }
             else
             {
@@ -59,6 +62,7 @@ public class FatherMovement : MonoBehaviour
         if(!Agent.pathPending && Agent.remainingDistance <= Agent.stoppingDistance)
         {
             if (!Agent.hasPath || Agent.velocity.sqrMagnitude == 0f)
+                IdleTimeAtCheckpoint = Random.Range(0, 5);
                 return true;
         }
         return false;
@@ -74,7 +78,6 @@ public class FatherMovement : MonoBehaviour
             if (IdleTimer >= IdleTimeAtCheckpoint)
             {
                 IdleTimer = 0;
-                IsIdle = false;
                 MoveToNextCheckpoint();
             }
         }
@@ -83,8 +86,8 @@ public class FatherMovement : MonoBehaviour
             if (IsReachedDestination())
             {
                 IsIdle = true;
-                Animator.SetBool("IsIdle", true);
-                Animator.SetBool("IsCatched", false);
+                Animator.SetBool("IsIdle", IsIdle);
+                Animator.SetBool("IsChasing", false);
                 Agent.ResetPath();
             }
         }
@@ -97,8 +100,10 @@ public class FatherMovement : MonoBehaviour
         CurrentCheckpointIndex = (CurrentCheckpointIndex + 1) % Checkpoints.Count;
         Transform currentCheckpoint = Checkpoints[CurrentCheckpointIndex];
         Agent.SetDestination(currentCheckpoint.position);
-        Animator.SetBool("IsCatched", false);
-        Animator.SetBool("IsIdle", false);
+        IsIdle = false;
+        IsChasing = false;
+        Animator.SetBool("IsIdle", IsIdle);
+        Animator.SetBool("IsChasing", IsChasing);
     }
 
     private bool ShouldChase()
@@ -139,11 +144,9 @@ public class FatherMovement : MonoBehaviour
         if (distanceToSound <= soundRadius)
         {
             Debug.Log("Hear Something at" + soundPosition);
-
             Agent.SetDestination(soundPosition);
-
-            Animator.SetBool("IsIdle", false);
             IsIdle = false;
+            Animator.SetBool("IsIdle", IsIdle);
             IdleTimer = 0f;
         }
     }
