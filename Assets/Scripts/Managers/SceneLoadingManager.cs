@@ -50,6 +50,12 @@ public class SceneLoadingManager : MonoBehaviour
         LoadScene(SceneType.Menu);
     }
 
+    public void ReloadScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
+
     private string GetSceneName(SceneType type)
     {
         foreach (SceneData data in sceneDatas)

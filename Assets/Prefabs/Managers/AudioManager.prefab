@@ -48,8 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundAudioClips: []
   sfxAudioClips:
-  - state: 4
+  - state: 0
     audioClip: {fileID: 8300000, guid: be0fd827f21ba4a8fa0943884c1f6fcc, type: 3}
+  - state: 1
+    audioClip: {fileID: 8300000, guid: 06016d4f2c774473dac6d070faae3a69, type: 3}
+  - state: 2
+    audioClip: {fileID: 8300000, guid: bd43df20e63264db58f15680ec31f091, type: 3}
   backgroundAudioSource: {fileID: 4886213126677040739}
   sfxAudioSource: {fileID: 1507524034192129013}
   defaultBackgroundMusic: 0
@@ -97,7 +101,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0

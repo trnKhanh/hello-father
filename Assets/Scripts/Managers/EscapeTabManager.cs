@@ -13,6 +13,7 @@ public class EscapeTabManager : MonoBehaviour
 
     [Header("Control References")]
     public Button resumeButton;
+    public Button restartButton;
     public Button quitButton;
 
     bool paused = false;
@@ -31,7 +32,6 @@ public class EscapeTabManager : MonoBehaviour
     {
         if (InputManager.Instance.escape)
         {
-            Debug.Log("Pause");
             if (!paused)
                 Pause();
             else
@@ -41,6 +41,9 @@ public class EscapeTabManager : MonoBehaviour
 
     public void Pause()
     {
+        if (ControlManager.Instance.frameOpenedTabs != 0)
+            return;
+
         paused = true;
 
         Show();
@@ -60,18 +63,25 @@ public class EscapeTabManager : MonoBehaviour
         UnsubribeToControlEvents();
 
         resumeButton.onClick.AddListener(resumeButton_onClick);
+        restartButton.onClick.AddListener(restartButton_onClick);
         quitButton.onClick.AddListener(quitButton_onClick);
     }
 
     void UnsubribeToControlEvents()
     {
         resumeButton.onClick.RemoveListener(resumeButton_onClick);
+        restartButton.onClick.RemoveListener(restartButton_onClick);
         quitButton.onClick.RemoveListener(quitButton_onClick);
     }
 
     void resumeButton_onClick()
     {
         Resume();
+    }
+
+    void restartButton_onClick()
+    {
+        SceneStateManager.Instance.Restart();
     }
 
     void quitButton_onClick()
@@ -81,15 +91,12 @@ public class EscapeTabManager : MonoBehaviour
 
     void Show()
     {
-        canvas.gameObject.SetActive(true);
-        Time.timeScale = 0;
-        ControlManager.Instance.UnlockCursor();
+        ControlManager.Instance.OpenTab(canvas);
     }
 
     void Hide()
     {
-        canvas.gameObject.SetActive(false);
-        Time.timeScale = 1;
-        ControlManager.Instance.LockCursor();
+        ControlManager.Instance.CloseTab(canvas);
+
     }
 }
