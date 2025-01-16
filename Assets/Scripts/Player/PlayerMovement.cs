@@ -24,8 +24,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Checking")]
     bool isGrounded;
 
+    [Header("Sound Settings")]
+    public float walkSoundRadius;
+    public float sprintSoundRadius;
+    float soundRadius = 0;
+
     [Header("References")]
     public Transform orientation;
+    public FatherMovement father;
 
     float horizontalInput;
     float verticalInput;
@@ -114,10 +120,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 currentState = MovementState.Sprinting;
                 movementSpeed = sprintSpeed;
+                soundRadius = sprintSoundRadius;
             } else
             {
                 currentState = MovementState.Walking;
                 movementSpeed = walkSpeed;
+                soundRadius = walkSoundRadius;
             }
         } else
         {
@@ -136,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
         {
             characterController.Move(moveDirection * movementSpeed * airMultiplier * Time.deltaTime);
         }
+        MakeSound(soundRadius);
 
         if (InputManager.Instance.jump && isGrounded)
         {
@@ -162,28 +171,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat(k_speedZ, InputManager.Instance.verticalInputRaw, 0.1f, Time.deltaTime);
 
             animator.SetBool(k_sprinting, InputManager.Instance.sprint);
-            //animator.SetBool(k_air, false);
-            //bool wantToMove = (horizontalInput != 0 || verticalInput != 0);
-
-            //if (wantToMove)
-            //{
-            //    animator.SetBool(k_moving, true);
-            //    if (InputManager.Instance.sprint)
-            //        animator.SetBool(k_sprinting, true);
-            //    else
-            //        animator.SetBool(k_sprinting, false);
-            //}
-            //else
-            //{
-            //    animator.SetBool(k_moving, false);
-            //    animator.SetBool(k_sprinting, false);
-            //}
-        } else
-        {
-            //animator.SetBool(k_sprinting, false);
-            //animator.SetBool(k_moving, false);
-            //animator.SetBool(k_air, true);
-        }
+        } 
     }
 
     void Jump()
@@ -196,5 +184,11 @@ public class PlayerMovement : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
+    }
+
+    public void MakeSound(float soundRadius)
+    {
+        if (father != null)
+            father.Hear(transform.position, soundRadius);
     }
 }

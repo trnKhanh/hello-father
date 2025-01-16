@@ -13,31 +13,41 @@ public class PlayerController : MonoBehaviour
 
     void UpdateInteract()
     {
+        FilterObject();
         if (interactableObjects.Count > 0)
         {
-            KeyCode interactKey = InputManager.Instance.InteractKey();
-            if (interactKey != KeyCode.None)
-                HintManager.Instance.ShowHint(InputManager.Instance.interactKeys[0], "Interact");
-        }
-
-        if (InputManager.Instance.interact)
-        {
             GameObject interactable = ClosestInteractableObject();
-            if (interactable != null)
+
+            KeyCode interactKey = InputManager.Instance.InteractKey();
+            string description = interactable.GetComponent<IInteractable>().GetDescription();
+            if (description == null)
+                description = "Interact";
+
+            if (interactKey != KeyCode.None)
+                HintManager.Instance.ShowHint(interactKey, description);
+
+            if (InputManager.Instance.interact)
             {
-                interactable.GetComponent<IInteractable>().Interact();
+                if (interactable != null)
+                {
+                    interactable.GetComponent<IInteractable>().Interact();
+                }
             }
         }
+    }
+
+    void FilterObject()
+    {
+        interactableObjects.RemoveWhere((gameObject) =>
+        {
+            return gameObject == null;
+        });
     }
 
     GameObject ClosestInteractableObject()
     {
         GameObject closestGameObject = null;
 
-        interactableObjects.RemoveWhere((gameObject) =>
-        {
-            return gameObject == null;
-        });
 
         foreach (GameObject obj in interactableObjects)
         {

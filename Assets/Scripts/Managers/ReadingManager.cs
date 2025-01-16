@@ -18,7 +18,6 @@ public class ReadingManager : MonoBehaviour
     public Button nextButton;
     public Button closeButton;
 
-
     void Awake()
     {
         if (Instance != null)
