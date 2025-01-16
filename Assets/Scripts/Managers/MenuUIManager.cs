@@ -7,8 +7,17 @@ using UnityEngine.UI;
 public class MenuUIManager : MonoBehaviour
 {
     [Header("References")]
-    public Button playButton;
+    public Button newGameButton;
     public Button quitButton;
+
+    string k_transition = "Transition";
+
+    Animator animator;
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void OnEnable()
     {
@@ -20,21 +29,29 @@ public class MenuUIManager : MonoBehaviour
         UnsubribeToButtonEvents();
     }
 
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            animator.SetTrigger(k_transition);
+        }
+    }
+
     void SubribeToButtonEvents()
     {
         UnsubribeToButtonEvents();
 
-        playButton.onClick.AddListener(playButton_onClick);
+        newGameButton.onClick.AddListener(newGameButton_onClick);
         quitButton.onClick.AddListener(quitButton_onClick);
     }
 
     void UnsubribeToButtonEvents()
     {
-        playButton.onClick.RemoveListener(playButton_onClick);
+        newGameButton.onClick.RemoveListener(newGameButton_onClick);
         quitButton.onClick.RemoveListener(quitButton_onClick);
     }
 
-    void playButton_onClick()
+    void newGameButton_onClick()
     {
         SceneStateManager.Instance.LoadNextScene();
     }

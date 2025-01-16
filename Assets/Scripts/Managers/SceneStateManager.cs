@@ -29,4 +29,9 @@ public class SceneStateManager : MonoBehaviour
     {
         SceneLoadingManager.Instance.LoadMenuScene();
     }
+
+    public void Restart()
+    {
+        SceneLoadingManager.Instance.ReloadScene();
+    }
 }
