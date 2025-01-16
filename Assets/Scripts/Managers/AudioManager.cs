@@ -16,6 +16,8 @@ public class AudioManager : MonoBehaviour
         TurnPage,
         Click,
         Hover,
+        KeyPickup,
+        OpenBook,
     }
 
     [Serializable]

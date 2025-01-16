@@ -12,12 +12,16 @@ public class Door : MonoBehaviour, IInteractable
     [Header("Key")]
     public PickupItem[] requiredKeys;
 
+    [Header("Description")]
+    public string description = "Open door";
+
     bool isClosed = true;
 
     Animator animator;
     AudioSource audioSource;
 
     string k_interact = "Interact";
+
 
     void Start()
     {
@@ -34,7 +38,27 @@ public class Door : MonoBehaviour, IInteractable
         {
             PlayLockedSound();
         }
+    }
 
+    public void Open()
+    {
+        if (isClosed)
+        {
+            Interact();
+        }
+    }
+
+    public void Close()
+    {
+        if (!isClosed)
+        {
+            Interact();
+        }
+    }
+
+    public string GetDescription()
+    {
+        return description;
     }
 
     public void PlayOpenSound()
@@ -54,5 +78,4 @@ public class Door : MonoBehaviour, IInteractable
         audioSource.clip = lockedSFX;
         audioSource.Play();
     }
-
 }

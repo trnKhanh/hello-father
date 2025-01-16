@@ -161,7 +161,7 @@ public class FatherMovement : MonoBehaviour
         return false;
     }
 
-    public void hear(Vector3 soundPosition, float soundRadius)
+    public void Hear(Vector3 soundPosition, float soundRadius)
     {
         float distanceToSound = Vector3.Distance(transform.position, soundPosition);
 
@@ -172,6 +172,16 @@ public class FatherMovement : MonoBehaviour
             IsIdle = false;
             Animator.SetBool("IsIdle", IsIdle);
             IdleTimer = 0f;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Father:OnTriggerEnter");
+        if (other.gameObject.TryGetComponent<Door>(out Door door))
+        {
+            Debug.Log("Father:open");
+            door.Open();
         }
     }
 }
