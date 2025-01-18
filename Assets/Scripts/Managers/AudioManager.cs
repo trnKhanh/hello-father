@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
     public enum BackgroundState
     {
         Menu,
+        Gameplay,
+        Gameover,
     }
     public enum SFXState
     {
