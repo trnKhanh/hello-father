@@ -46,9 +46,6 @@ public class GameoverTabManager : MonoBehaviour
     {
         Show();
         SubribeToControlEvents();
-
-        Debug.Log(k_gamevover_anim);
-        //animator.Play(k_gamevover_anim, -1, 0);
     }
 
     void SubribeToControlEvents()
@@ -77,7 +74,8 @@ public class GameoverTabManager : MonoBehaviour
 
     void Show()
     {
-        ControlManager.Instance.OpenTab(canvas);
+        AudioManager.Instance.PlayBackgroundMusic(AudioManager.BackgroundState.Gameover);
+        ControlManager.Instance.OpenTab(canvas, false);
     }
 
     void Hide()

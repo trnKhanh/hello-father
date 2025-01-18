@@ -13,7 +13,8 @@ public class EscapeTabManager : MonoBehaviour
 
     [Header("Control References")]
     public Button resumeButton;
-    public Button restartButton;
+    public Button saveGameButton;
+    public Button loadGameButton;
     public Button quitButton;
 
     bool paused = false;
@@ -63,14 +64,16 @@ public class EscapeTabManager : MonoBehaviour
         UnsubribeToControlEvents();
 
         resumeButton.onClick.AddListener(resumeButton_onClick);
-        restartButton.onClick.AddListener(restartButton_onClick);
+        saveGameButton.onClick.AddListener(saveGameButton_onClick);
+        loadGameButton.onClick.AddListener(loadGameButton_onClick);
         quitButton.onClick.AddListener(quitButton_onClick);
     }
 
     void UnsubribeToControlEvents()
     {
         resumeButton.onClick.RemoveListener(resumeButton_onClick);
-        restartButton.onClick.RemoveListener(restartButton_onClick);
+        saveGameButton.onClick.RemoveListener(saveGameButton_onClick);
+        loadGameButton.onClick.RemoveListener(loadGameButton_onClick);
         quitButton.onClick.RemoveListener(quitButton_onClick);
     }
 
@@ -79,10 +82,16 @@ public class EscapeTabManager : MonoBehaviour
         Resume();
     }
 
-    void restartButton_onClick()
+    void saveGameButton_onClick()
+    {
+        GameDataManager.Instance.Save();
+    }
+
+    void loadGameButton_onClick()
     {
         SceneStateManager.Instance.Restart();
     }
+
 
     void quitButton_onClick()
     {
