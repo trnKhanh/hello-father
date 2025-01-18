@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,6 +20,7 @@ public class LoadingScreen : MonoBehaviour
             return;
         }
         Instance = this;
+        StartCoroutine(LoadLevelAsync("1"));
     }
 
     public void Show()
@@ -38,13 +38,6 @@ public class LoadingScreen : MonoBehaviour
         {
             loadingScreenPanel.gameObject.SetActive(false);
         }
-    }
-
-    public void LoadLevelBtn(string levelToLoad)
-    {
-        loadingScreenPanel.gameObject.SetActive(true);
-
-        StartCoroutine(LoadLevelAsync(levelToLoad));
     }
 
     IEnumerator LoadLevelAsync(string levelToLoad)
