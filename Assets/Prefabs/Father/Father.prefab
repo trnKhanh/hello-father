@@ -1044,6 +1044,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1771825546114025090}
+  - {fileID: 1448882993197129063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &9196180788189120514
@@ -1079,18 +1080,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b7a0f00b361ab4aa7f4699593ae3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
-  UpdateSpeed: 0.1
-  SoundSource: {fileID: 0}
+  player: {fileID: 0}
+  viewRange: 10
+  viewAngle: 120
+  chaseDistance: 10
   Checkpoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  ViewAngle: 45
-  ChaseDistance: 10
-  chaseSpeed: 10
+  idleTimeMin: 3
+  idleTimeMax: 5
   walkSpeed: 5
+  chaseSpeed: 10
+  fatherEye: {fileID: 1163592551512117931}
 --- !u!195 &6249989712155551370
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1104,7 +1107,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 960
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -1135,11 +1138,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!136 &7671463723141545134
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1162,7 +1165,7 @@ CapsuleCollider:
   m_Radius: 0.15
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3324586541740202626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,7 +1795,7 @@ Animator:
   m_PrefabInstance: {fileID: 1574604919279102857}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4727383925941520601}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 7ebafc600ba1b7245a2b31cf8d315bdb, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 1
@@ -1934,6 +1937,59 @@ Transform:
   - {fileID: 7041334479569953645}
   m_Father: {fileID: 949570095656697875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5545267248828493916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1448882993197129063}
+  - component: {fileID: 863076862606542758}
+  m_Layer: 0
+  m_Name: InteractRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1448882993197129063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5545267248828493916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7418504699073398346}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &863076862606542758
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5545267248828493916}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5803885607007207882
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,7 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab3dd3e9759ba4a9597a17082450331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundAudioClips: []
+  backgroundAudioClips:
+  - state: 0
+    audioClip: {fileID: 8300000, guid: 30402048fee374864b7aa3c4268288ff, type: 3}
+  - state: 1
+    audioClip: {fileID: 8300000, guid: f45d20162b2e5446b9eb1615e79fbfe2, type: 3}
   sfxAudioClips:
   - state: 0
     audioClip: {fileID: 8300000, guid: be0fd827f21ba4a8fa0943884c1f6fcc, type: 3}
@@ -54,6 +58,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 06016d4f2c774473dac6d070faae3a69, type: 3}
   - state: 2
     audioClip: {fileID: 8300000, guid: bd43df20e63264db58f15680ec31f091, type: 3}
+  - state: 3
+    audioClip: {fileID: 8300000, guid: 15346c1e18ab34f9ca951e72c41ca818, type: 3}
   backgroundAudioSource: {fileID: 4886213126677040739}
   sfxAudioSource: {fileID: 1507524034192129013}
   defaultBackgroundMusic: 0

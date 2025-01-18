@@ -80,10 +80,11 @@ public class ControlManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void OpenTab(Canvas tab)
+    public void OpenTab(Canvas tab, bool pause = true)
     {
         PushTab(tab);
-        PauseGame();
+        if (pause)
+            PauseGame();
         UnlockCursor();
         tab.gameObject.SetActive(true);
     }

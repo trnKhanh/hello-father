@@ -39,8 +39,9 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     CharacterController characterController;
-
+    PlayerAudioManager audioManager;
     Animator animator;
+
     string k_moving = "Moving";
     string k_sprinting = "Sprinting";
     string k_air = "Air";
@@ -61,42 +62,11 @@ public class PlayerMovement : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        audioManager = GetComponent<PlayerAudioManager>();
     }
 
     void Update()
     {
-        // >>> TODO: REMOVE THIS
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            InputManager.Instance.controlActive = false;
-            List<DialogManager.Dialog> dialogs = new List<DialogManager.Dialog>
-            {
-                new DialogManager.Dialog
-                {
-                    character = DialogManager.Character.MainCharacter,
-                    text = "Hi there.",
-                    sound = null,
-                },
-                new DialogManager.Dialog
-                {
-                    character = DialogManager.Character.MainCharacter,
-                    text = "Hi there. This is me. This is me. Hehehehehehehehehehehehehehehehehehehehehehehehe",
-                    sound = null,
-                }
-            };
-            DialogManager.Instance.PlayDialogs(
-                dialogs,
-                (int dialogId) =>
-                {
-                    if (dialogId == dialogs.Count - 1)
-                    {
-                        InputManager.Instance.controlActive = true;
-                    }
-                }
-            );
-        }
-        // <<< TODO: REMOVE THIS
-
         GroundChecking();
         UpdateMovementState();
         MovePlayer();
@@ -121,13 +91,21 @@ public class PlayerMovement : MonoBehaviour
                 currentState = MovementState.Sprinting;
                 movementSpeed = sprintSpeed;
                 soundRadius = sprintSoundRadius;
+                audioManager.Sprinting();
             } else
             {
                 currentState = MovementState.Walking;
                 movementSpeed = walkSpeed;
                 soundRadius = walkSoundRadius;
+                audioManager.Walking();
             }
-        } else
+
+            if (verticalInput == 0 && horizontalInput == 0)
+            {
+                audioManager.Stop();
+            }
+        }
+        else
         {
             currentState = MovementState.Air;
         }

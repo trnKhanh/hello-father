@@ -1,12 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, IGameData
 {
     public static InventoryManager Instance { get; private set; }
 
-    HashSet<PickupItem> currentKeys = new HashSet<PickupItem>();
+    [Serializable]
+    public class InventoryData
+    {
+        public List<int> currentKeys = new List<int>();
+    }
+
+    private InventoryData inventoryData = new InventoryData();
 
     private void Awake()
     {
@@ -18,16 +26,19 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
     }
 
-    public void ObtainKey(PickupItem key)
+    public void ObtainKey(int id)
     {
-        currentKeys.Add(key);
+        if (inventoryData.currentKeys.Contains(id))
+            return;
 
-        InventoryHUDManager.Instance.AddNewItem(key);
+        inventoryData.currentKeys.Add(id);
+
+        InventoryHUDManager.Instance.AddNewItem(PickupItem.GetById(id));
     }
 
-    public bool HasKey(PickupItem key)
+    public bool HasKey(int id)
     {
-        return currentKeys.Contains(key);
+        return inventoryData.currentKeys.Contains(id);
     }
 
     public bool HasAnyKey(PickupItem[] keys)
@@ -37,9 +48,36 @@ public class InventoryManager : MonoBehaviour
 
         foreach (PickupItem key in keys)
         {
-            if (currentKeys.Contains(key))
+            if (HasKey(key.id))
                 return true;
         }
         return false;
+    }
+
+    public void Save(string root)
+    {
+        string savePath = Path.Join(root, "inventory.json");
+
+        Debug.Log(String.Format("Save Inventory to {0}", savePath));
+        File.WriteAllText(savePath, JsonUtility.ToJson(inventoryData));
+    }
+
+    public void Load(string root)
+    {
+        try
+        {
+            string savePath = Path.Join(root, "inventory.json");
+            InventoryData data = JsonUtility.FromJson<InventoryData>(File.ReadAllText(savePath));
+
+            foreach (int id in data.currentKeys)
+            {
+                ObtainKey(id);
+                PickupItem.RemoveById(id);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
     }
 }
