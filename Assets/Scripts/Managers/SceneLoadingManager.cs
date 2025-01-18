@@ -50,14 +50,14 @@ public class SceneLoadingManager : MonoBehaviour, IGameData
 
         if (sceneName != null)
         {
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            LoadingScreen.Instance.StartLoading(sceneName);
         }
     }
 
     public void LoadSavedScene()
     {
         Debug.Log(sceneStateData.currentScene);
-        SceneManager.LoadScene(sceneStateData.currentScene, LoadSceneMode.Single);
+        LoadingScreen.Instance.StartLoading(sceneStateData.currentScene);
     }
 
     public void LoadMenuScene()
@@ -75,7 +75,7 @@ public class SceneLoadingManager : MonoBehaviour, IGameData
     {
         ControlManager.Instance.ResumeGame();
         string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName, LoadSceneMode.Single);
+        LoadingScreen.Instance.StartLoading(currentSceneName);
     }
 
     private string GetSceneName(SceneType type)

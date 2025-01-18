@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,7 +21,27 @@ public class LoadingScreen : MonoBehaviour
             return;
         }
         Instance = this;
-        StartCoroutine(LoadLevelAsync("1"));
+        DontDestroyOnLoad(this);
+    }
+
+    private void Start()
+    {
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        Hide();
+    }
+
+    public void StartLoading(string levelName)
+    {
+        if (string.IsNullOrEmpty(levelName))
+        {
+            return;
+        }
+        StartCoroutine(LoadLevelAsync(levelName));
+        Show();
     }
 
     public void Show()
