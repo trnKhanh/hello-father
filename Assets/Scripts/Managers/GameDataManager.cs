@@ -55,7 +55,9 @@ public class GameDataManager : MonoBehaviour
     public bool HasSaveFile()
     {
         string savePath = Path.Join(Application.persistentDataPath, saveFileName);
-        return Directory.Exists(savePath);
+
+        string sceneSaveFile = Path.Join(savePath, "scene.json");
+        return File.Exists(sceneSaveFile);
     }
 
     public void DeleteSaveFile()
