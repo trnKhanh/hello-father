@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +22,11 @@ public class SceneStateManager : MonoBehaviour
         Instance = this;
     }
 
+    public void LoadSavedScene()
+    {
+        SceneLoadingManager.Instance.LoadSavedScene();
+    }
+
     public void LoadNextScene()
     {
         SceneLoadingManager.Instance.LoadScene(nextScene);
@@ -28,5 +35,10 @@ public class SceneStateManager : MonoBehaviour
     public void LoadMenu()
     {
         SceneLoadingManager.Instance.LoadMenuScene();
+    }
+
+    public void Restart()
+    {
+        SceneLoadingManager.Instance.ReloadScene();
     }
 }

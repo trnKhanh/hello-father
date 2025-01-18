@@ -1,10 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamagable, IGameData
 {
+    [Serializable]
+    public class PlayerData
+    {
+        public Vector3 position;
+    }
+
+    [Header("References")]
+    public ThirdPersonCameraController cameraController;
+
     HashSet<GameObject> interactableObjects = new HashSet<GameObject>();
+
+    PlayerMovement playerMovement;
+    PlayerAudioManager audioManager;
+    Animator animator;
+
+    string k_die = "Die";
+
+    private void Start()
+    {
+        playerMovement = GetComponent<PlayerMovement>();
+        animator = GetComponent<Animator>();
+        audioManager = GetComponent<PlayerAudioManager>();
+    }
 
     void Update()
     {
@@ -13,31 +37,41 @@ public class PlayerController : MonoBehaviour
 
     void UpdateInteract()
     {
+        FilterObject();
         if (interactableObjects.Count > 0)
         {
-            KeyCode interactKey = InputManager.Instance.InteractKey();
-            if (interactKey != KeyCode.None)
-                HintManager.Instance.ShowHint(InputManager.Instance.interactKeys[0], "Interact");
-        }
-
-        if (InputManager.Instance.interact)
-        {
             GameObject interactable = ClosestInteractableObject();
-            if (interactable != null)
+
+            KeyCode interactKey = InputManager.Instance.InteractKey();
+            string description = interactable.GetComponent<IInteractable>().GetDescription();
+            if (description == null)
+                description = "Interact";
+
+            if (interactKey != KeyCode.None)
+                HintManager.Instance.ShowHint(interactKey, description);
+
+            if (InputManager.Instance.interact)
             {
-                interactable.GetComponent<IInteractable>().Interact();
+                if (interactable != null)
+                {
+                    interactable.GetComponent<IInteractable>().Interact();
+                }
             }
         }
+    }
+
+    void FilterObject()
+    {
+        interactableObjects.RemoveWhere((gameObject) =>
+        {
+            return gameObject == null;
+        });
     }
 
     GameObject ClosestInteractableObject()
     {
         GameObject closestGameObject = null;
 
-        interactableObjects.RemoveWhere((gameObject) =>
-        {
-            return gameObject == null;
-        });
 
         foreach (GameObject obj in interactableObjects)
         {
@@ -66,5 +100,51 @@ public class PlayerController : MonoBehaviour
         IInteractable interactable;
         if (other.TryGetComponent<IInteractable>(out interactable))
             interactableObjects.Remove(other.gameObject);
+    }
+
+    public void Hit()
+    {
+        Die();
+    }
+
+    void Die()
+    {
+        cameraController.ChangeCameraStyle(ThirdPersonCameraController.CameraStyle.Basic);
+        InputManager.Instance.controlActive = false;
+        animator.SetTrigger(k_die);
+        audioManager.Die();
+        Invoke(nameof(Gameover), 1);
+    }
+
+    void Gameover()
+    {
+        GameoverTabManager.Instance.GameOver();
+    }
+
+    public void Save(string root)
+    {
+        string savePath = Path.Join(root, "player.json");
+        PlayerData playerData = new PlayerData();
+
+        playerData.position = transform.position;
+
+        Debug.Log(String.Format("Save player to {0}", savePath));
+        File.WriteAllText(savePath, JsonUtility.ToJson(playerData));
+    }
+
+    public void Load(string root)
+    {
+        try
+        {
+            string savePath = Path.Join(root, "player.json");
+            PlayerData playerData = JsonUtility.FromJson<PlayerData>(File.ReadAllText(savePath));
+            transform.position = playerData.position;
+            Debug.Log(transform.position);
+            Debug.Log(playerData.position);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
     }
 }

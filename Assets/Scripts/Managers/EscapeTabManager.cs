@@ -13,6 +13,8 @@ public class EscapeTabManager : MonoBehaviour
 
     [Header("Control References")]
     public Button resumeButton;
+    public Button saveGameButton;
+    public Button loadGameButton;
     public Button quitButton;
 
     bool paused = false;
@@ -31,7 +33,6 @@ public class EscapeTabManager : MonoBehaviour
     {
         if (InputManager.Instance.escape)
         {
-            Debug.Log("Pause");
             if (!paused)
                 Pause();
             else
@@ -41,6 +42,9 @@ public class EscapeTabManager : MonoBehaviour
 
     public void Pause()
     {
+        if (ControlManager.Instance.frameOpenedTabs != 0)
+            return;
+
         paused = true;
 
         Show();
@@ -60,12 +64,16 @@ public class EscapeTabManager : MonoBehaviour
         UnsubribeToControlEvents();
 
         resumeButton.onClick.AddListener(resumeButton_onClick);
+        saveGameButton.onClick.AddListener(saveGameButton_onClick);
+        loadGameButton.onClick.AddListener(loadGameButton_onClick);
         quitButton.onClick.AddListener(quitButton_onClick);
     }
 
     void UnsubribeToControlEvents()
     {
         resumeButton.onClick.RemoveListener(resumeButton_onClick);
+        saveGameButton.onClick.RemoveListener(saveGameButton_onClick);
+        loadGameButton.onClick.RemoveListener(loadGameButton_onClick);
         quitButton.onClick.RemoveListener(quitButton_onClick);
     }
 
@@ -74,6 +82,17 @@ public class EscapeTabManager : MonoBehaviour
         Resume();
     }
 
+    void saveGameButton_onClick()
+    {
+        GameDataManager.Instance.Save();
+    }
+
+    void loadGameButton_onClick()
+    {
+        SceneStateManager.Instance.Restart();
+    }
+
+
     void quitButton_onClick()
     {
         SceneStateManager.Instance.LoadMenu();
@@ -81,15 +100,12 @@ public class EscapeTabManager : MonoBehaviour
 
     void Show()
     {
-        canvas.gameObject.SetActive(true);
-        Time.timeScale = 0;
-        ControlManager.Instance.UnlockCursor();
+        ControlManager.Instance.OpenTab(canvas);
     }
 
     void Hide()
     {
-        canvas.gameObject.SetActive(false);
-        Time.timeScale = 1;
-        ControlManager.Instance.LockCursor();
+        ControlManager.Instance.CloseTab(canvas);
+
     }
 }

@@ -1,89 +1,155 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 
 
-public class FatherMovement : MonoBehaviour
+public class FatherMovement : MonoBehaviour, IGameData
 {
-    public Transform Target;
-    public float UpdateSpeed = 0.1f;
-    public AudioSource SoundSource;
+    [Serializable]
+    public class FatherData
+    {
+        public Vector3 position;
+        public int checkpointId;
+        public Vector3 destination;
+        public bool isIdle;
+        public bool isChasing;
+    }
+
+    [Header("Target")]
+    public Transform player;
+    public float viewRange = 10f;
+    public float viewAngle = 45f;
+    public float chaseDistance = 10f;
+
+    [Header("Patrol")]
     public List<Transform> Checkpoints = new List<Transform>();
-    public float ViewAngle = 45f;
-    public float ChaseDistance = 10f;
-    public float chaseSpeed;
+    public int idleTimeMin;
+    public int idleTimeMax;
+
+    [Header("Movement")]
     public float walkSpeed;
+    public float chaseSpeed;
 
-    private int CurrentCheckpointIndex = 0;
-    private float CatchedThreshold = 5f;
-    private float IdleTimeAtCheckpoint;
-    private NavMeshAgent Agent;
-    private Animator Animator;
+    [Header("References")]
+    public Transform fatherEye;
 
-    private bool IsIdle = false;
-    private bool IsChasing = false;
-    private float IdleTimer = 0f;
+    int currentCheckpointId = 0;
+
+    NavMeshAgent agent;
+    Animator animator;
+    AudioSource audioSource;
+
+    bool isIdle = false;
+    bool isChasing = false;
+    bool hasCatched = false;
+    private float idleTimer = 0f;
 
     string k_catch = "Catch";
+    string k_chasing = "Chasing";
+    string k_idle = "Idle";
 
-    bool hasCatched = false;
 
     private void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
-        Animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-        Debug.Log(k_catch);
-        float distanceToTarget = Vector3.Distance(Target.position, transform.position);
+        PatrolRoute();
+        UpdateAnimation();
+    }
 
-        if (distanceToTarget <= CatchedThreshold && hasCatched == false)
+    private void FixedUpdate()
+    {
+        if (SeeTarget())
         {
-            hasCatched = true;
-            Animator.SetTrigger(k_catch);
-            Agent.ResetPath();
-            Wait(2);
-            return;
+            Debug.Log("See target");
+            ChaseTo(player.position);
         }
-        else
+    }
+
+
+    private void UpdateAnimation()
+    {
+        animator.SetBool(k_chasing, isChasing);
+        animator.SetBool(k_idle, isIdle);
+    }
+
+    private bool SeeTarget()
+    {
+        if (hasCatched)
+            return false;
+
+        Vector3 directionToTarget = (player.position - transform.position).normalized;
+        float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+        float distanceToTarget = (transform.position - player.position).magnitude;
+
+        if (angleToTarget <= viewAngle / 2 && distanceToTarget <= viewRange)
         {
-            if (ShouldChase())
+            if (Physics.Raycast(fatherEye.position, directionToTarget, out RaycastHit hit))
             {
-                Agent.speed = chaseSpeed;
-                Debug.Log("COMMING............");
-                Agent.SetDestination(Target.position);
-                IsIdle = false;
-                IsChasing = true;
-                Animator.SetBool("IsIdle", IsIdle);
-                Animator.SetBool("IsChasing", IsChasing);
-            }
-            else
-            {
-                Agent.speed = walkSpeed;
-                PatrolRoute();
+                if (hit.collider.gameObject == player.gameObject)
+                {
+                    return true;
+                }
             }
         }
+
+        return false;
     }
 
     private void Wait(float waitTime = -1)
     {
         if (waitTime < 0)
-            waitTime = Random.Range(1, 5);
-        Agent.SetDestination(transform.position);
+            waitTime = UnityEngine.Random.Range(idleTimeMin, idleTimeMax);
 
-        IsIdle = true;
-        IdleTimeAtCheckpoint = waitTime;
+        agent.SetDestination(transform.position);
+        isIdle = true;
+        isChasing = false;
+        idleTimer = waitTime;
     }
-  
-    private bool IsReachedDestination()
+
+    void ChaseTo(Vector3 target)
     {
-        if(!Agent.pathPending && Agent.remainingDistance <= Agent.stoppingDistance)
+        agent.speed = chaseSpeed;
+        agent.SetDestination(target);
+
+        isIdle = false;
+        isChasing = true;
+    }
+
+    void WalkTo(Vector3 target)
+    {
+        agent.speed = walkSpeed;
+        agent.SetDestination(target);
+
+        isIdle = false;
+        isChasing = false;
+    }
+
+    void Catch()
+    {
+        if (hasCatched)
+            return;
+
+        hasCatched = true;
+        animator.SetTrigger(k_catch);
+
+        player.gameObject.GetComponent<IDamagable>().Hit();
+    }
+
+    private bool ReachedDestination()
+    {
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (!Agent.hasPath || Agent.velocity.sqrMagnitude == 0f)
+            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
             {
                 return true;
             }
@@ -94,84 +160,105 @@ public class FatherMovement : MonoBehaviour
     private void PatrolRoute()
     {
         if (Checkpoints.Count == 0) return;
-        if (IsReachedDestination() && IsIdle == false)
+
+        if (ReachedDestination())
         {
-            IsIdle = true;
-            Wait(3);
-            Agent.ResetPath();
-            Animator.SetBool("IsChasing", false);
+            Debug.Log(isIdle);
+            if (!isIdle)
+                Wait();
+            Debug.Log(isIdle);
+
         }
 
-        Animator.SetBool("IsIdle", IsIdle);
-        if (IsIdle)
+        if (!isIdle) return;
+
+        idleTimer -= Time.deltaTime;
+        if (idleTimer <= 0)
         {
-            IdleTimer += Time.deltaTime;
-            if (IdleTimer >= IdleTimeAtCheckpoint)
-            {
-                IdleTimer = 0;
-                MoveToNextCheckpoint();
-            }
+            idleTimer = 0;
+            MoveToNextCheckpoint();
         }
+        Debug.Log(isIdle);
     }
 
     private void MoveToNextCheckpoint()
     {
         if (Checkpoints.Count == 0) return;
 
-        CurrentCheckpointIndex = (CurrentCheckpointIndex + 1) % Checkpoints.Count;
-        Transform currentCheckpoint = Checkpoints[CurrentCheckpointIndex];
-        Agent.SetDestination(currentCheckpoint.position);
-        IsIdle = false;
-        IsChasing = false;
-        Animator.SetBool("IsIdle", IsIdle);
-        Animator.SetBool("IsChasing", IsChasing);
+        currentCheckpointId = (currentCheckpointId + 1) % Checkpoints.Count;
+        Transform currentCheckpoint = Checkpoints[currentCheckpointId];
+
+        WalkTo(currentCheckpoint.position);
     }
 
-    private bool ShouldChase()
-    {
-        if (hasCatched)
-            return false;
+    
 
-        float distanceToTarget = Vector3.Distance(transform.position, Target.position);
-        // If player makes sound, chasing
-        if (SoundSource != null && SoundSource.isPlaying && distanceToTarget <= ChaseDistance)
-        {
-            return true;
-        }
-
-        Vector3 directionToTarget = (Target.position - transform.position).normalized;
-        float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
-
-        // If father can't see player, not chasing
-        if (angleToTarget > ViewAngle / 2)
-        {
-            return false;
-        }
-        else
-        {
-            if (Physics.Raycast(transform.position + Vector3.up, directionToTarget, out RaycastHit hit))
-            {
-                if (hit.transform == Target)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void hear(Vector3 soundPosition, float soundRadius)
+    public void Hear(Vector3 soundPosition, float soundRadius)
     {
         float distanceToSound = Vector3.Distance(transform.position, soundPosition);
 
-        if (distanceToSound <= soundRadius)
+        if (distanceToSound <= soundRadius && !hasCatched)
         {
-            Debug.Log("Hear Something at" + soundPosition);
-            Agent.SetDestination(soundPosition);
-            IsIdle = false;
-            Animator.SetBool("IsIdle", IsIdle);
-            IdleTimer = 0f;
+            Debug.Log("I hear you");
+            ChaseTo(soundPosition);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == player.gameObject)
+        {
+            Catch();
+        }
+
+        if (other.gameObject.TryGetComponent<Door>(out Door door))
+        {
+            door.Open();
+        }
+    }
+
+    public void Save(string root)
+    {
+        string savePath = Path.Join(root, "father.json");
+        FatherData fatherData = new FatherData();
+        
+        fatherData.position = transform.position;
+        fatherData.checkpointId = currentCheckpointId;
+        fatherData.destination = agent.destination;
+        fatherData.isIdle = isIdle;
+        fatherData.isChasing = isChasing;
+
+        Debug.Log(String.Format("Save father to {0}", savePath));
+        File.WriteAllText(savePath, JsonUtility.ToJson(fatherData));
+    }
+
+    public void Load(string root)
+    {
+        try
+        {
+            string savePath = Path.Join(root, "father.json");
+            FatherData fatherData = JsonUtility.FromJson<FatherData>(File.ReadAllText(savePath));
+
+            transform.position = fatherData.position;
+            currentCheckpointId = fatherData.checkpointId;
+
+            isIdle = fatherData.isIdle;
+            isChasing = fatherData.isChasing;
+
+            if (isIdle)
+            {
+                Wait();
+            } else if (hasCatched)
+            {
+                if (isChasing)
+                    ChaseTo(fatherData.destination);
+                else
+                    WalkTo(fatherData.destination);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
         }
     }
 }

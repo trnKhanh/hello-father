@@ -48,6 +48,6 @@ MonoBehaviour:
   interactKeys: 65000000
   sprintKeys: 30010000
   crouchKeys: 63000000
-  escapeKeys: 70000000
+  escapeKeys: 700000001b000000
   controlActive: 1
   UIActive: 1

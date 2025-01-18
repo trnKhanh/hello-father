@@ -10,18 +10,16 @@ public class AudioManager : MonoBehaviour
     public enum BackgroundState
     {
         Menu,
-        NormalLevel,
-        BossLevel,
-        SadLevel,
-        Credit
+        Gameplay,
+        Gameover,
     }
     public enum SFXState
     {
-        Confirm,
-        Cancle,
-        Achievement,
-        End,
         TurnPage,
+        Click,
+        Hover,
+        KeyPickup,
+        OpenBook,
     }
 
     [Serializable]
@@ -56,6 +54,7 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
     }
 
@@ -83,7 +82,6 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(SFXState state)
     {
-        Debug.Log(state);
         AudioClip audioClip = GetSFXAudioClip(state);
         sfxAudioSource.PlayOneShot(audioClip);
     }

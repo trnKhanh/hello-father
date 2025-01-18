@@ -18,7 +18,6 @@ public class ReadingManager : MonoBehaviour
     public Button nextButton;
     public Button closeButton;
 
-
     void Awake()
     {
         if (Instance != null)
@@ -31,12 +30,22 @@ public class ReadingManager : MonoBehaviour
 
     void OnEnable()
     {
-        closeButton.onClick.AddListener(closeButton_onClick);
+        if (closeButton)
+            closeButton.onClick.AddListener(closeButton_onClick);
     }
 
     void OnDisable()
     {
-        closeButton.onClick.RemoveListener(closeButton_onClick);
+        if (closeButton)
+            closeButton.onClick.RemoveListener(closeButton_onClick);
+    }
+
+    void Update()
+    {
+        if (InputManager.Instance.escape)
+        {
+            Hide();
+        }
     }
 
     public void StartRead(PageController readableObject)
@@ -112,16 +121,12 @@ public class ReadingManager : MonoBehaviour
 
     void Show()
     {
-        canvas.gameObject.SetActive(true);
-        Time.timeScale = 0;
-        ControlManager.Instance.UnlockCursor();
+        ControlManager.Instance.OpenTab(canvas);
     }
 
     void Hide()
     {
-        canvas.gameObject.SetActive(false);
-        Time.timeScale = 1;
-        ControlManager.Instance.LockCursor();
+        ControlManager.Instance.CloseTab(canvas);
     }
 
 }

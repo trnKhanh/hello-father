@@ -12,10 +12,10 @@ public class PickupItemUI : MonoBehaviour
 
     public void SetUI(Sprite icon, string name)
     {
-        if (icon != null)
+        if (icon != null && itemIconUI != null)
             itemIconUI.sprite = icon;
 
-        if (name != null)
+        if (name != null && itemNameUI != null)
             itemNameUI.text = name;
     }
 }
