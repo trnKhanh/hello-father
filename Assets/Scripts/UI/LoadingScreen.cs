@@ -21,6 +21,7 @@ public class LoadingScreen : MonoBehaviour
             return;
         }
         Instance = this;
+
         DontDestroyOnLoad(this);
     }
 

@@ -1793,6 +1793,91 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8169172866375103370
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 137016768400574443, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 3eda08f8a8be042459ce8ae734f372f0, type: 2}
+    - target: {fileID: 137016768400574443, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -3058886160129462335, guid: 3eda08f8a8be042459ce8ae734f372f0, type: 2}
+    - target: {fileID: 137016768400574443, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 300.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 169
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177108232431012944, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459109849269498905, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451021727269277186, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614953472460083570, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_Name
+      value: LoadingScreenManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614953472460083570, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7421118036058095063, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1802,3 +1887,4 @@ SceneRoots:
   - {fileID: 1668635377}
   - {fileID: 1839929329}
   - {fileID: 92735486}
+  - {fileID: 8169172866375103370}
