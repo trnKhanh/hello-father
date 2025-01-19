@@ -40,6 +40,8 @@ public class FatherMovement : MonoBehaviour, IGameData
     [Header("References")]
     public Transform fatherEye;
 
+    public bool hostile = true;
+
     int currentCheckpointId = 0;
 
     NavMeshAgent agent;
@@ -121,6 +123,9 @@ public class FatherMovement : MonoBehaviour, IGameData
 
     void ChaseTo(Vector3 target)
     {
+        if (!hostile)
+            return;
+
         agent.speed = chaseSpeed;
         agent.SetDestination(target);
 
@@ -216,7 +221,8 @@ public class FatherMovement : MonoBehaviour, IGameData
     {
         if (other.gameObject == player.gameObject)
         {
-            Catch();
+            if (hostile)
+                Catch();
         }
 
         if (other.gameObject.TryGetComponent<Door>(out Door door))
