@@ -24,6 +24,9 @@ public class FatherMovement : MonoBehaviour, IGameData
     public float viewRange = 10f;
     public float viewAngle = 45f;
     public float chaseDistance = 10f;
+    public float reachingTargetTimeMax = 6f;
+    public float reachingTargetTimeMin = 10f;
+    float reachingTargetTimeout = 0f;
 
     [Header("Patrol")]
     public List<Transform> Checkpoints = new List<Transform>();
@@ -70,7 +73,6 @@ public class FatherMovement : MonoBehaviour, IGameData
     {
         if (SeeTarget())
         {
-            Debug.Log("See target");
             ChaseTo(player.position);
         }
     }
@@ -93,10 +95,11 @@ public class FatherMovement : MonoBehaviour, IGameData
 
         if (angleToTarget <= viewAngle / 2 && distanceToTarget <= viewRange)
         {
-            if (Physics.Raycast(fatherEye.position, directionToTarget, out RaycastHit hit))
+            if (Physics.SphereCast(fatherEye.position, 0.2f, directionToTarget, out RaycastHit hit))
             {
                 if (hit.collider.gameObject == player.gameObject)
                 {
+                    Debug.Log("See target");
                     return true;
                 }
             }
@@ -123,6 +126,7 @@ public class FatherMovement : MonoBehaviour, IGameData
 
         isIdle = false;
         isChasing = true;
+        reachingTargetTimeout = UnityEngine.Random.Range(reachingTargetTimeMin, reachingTargetTimeMax);
     }
 
     void WalkTo(Vector3 target)
@@ -132,6 +136,7 @@ public class FatherMovement : MonoBehaviour, IGameData
 
         isIdle = false;
         isChasing = false;
+        reachingTargetTimeout = UnityEngine.Random.Range(reachingTargetTimeMin, reachingTargetTimeMax);
     }
 
     void Catch()
@@ -147,6 +152,9 @@ public class FatherMovement : MonoBehaviour, IGameData
 
     private bool ReachedDestination()
     {
+        if (isChasing && reachingTargetTimeout <= 0f)
+            return true;
+
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
@@ -159,6 +167,8 @@ public class FatherMovement : MonoBehaviour, IGameData
 
     private void PatrolRoute()
     {
+        reachingTargetTimeout -= Time.deltaTime;
+
         if (Checkpoints.Count == 0) return;
 
         if (ReachedDestination())
@@ -175,10 +185,8 @@ public class FatherMovement : MonoBehaviour, IGameData
         idleTimer -= Time.deltaTime;
         if (idleTimer <= 0)
         {
-            idleTimer = 0;
             MoveToNextCheckpoint();
         }
-        Debug.Log(isIdle);
     }
 
     private void MoveToNextCheckpoint()
@@ -213,7 +221,16 @@ public class FatherMovement : MonoBehaviour, IGameData
 
         if (other.gameObject.TryGetComponent<Door>(out Door door))
         {
-            door.Open();
+            if (!door.NeedKey())
+                door.Open();
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Door"))
+        {
+            WalkTo(transform.position);
         }
     }
 

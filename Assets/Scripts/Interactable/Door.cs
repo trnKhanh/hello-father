@@ -33,11 +33,17 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (InventoryManager.Instance.HasAnyKey(requiredKeys))
         {
+            isClosed = !isClosed;
             animator.SetTrigger(k_interact);
         } else
         {
             PlayLockedSound();
         }
+    }
+
+    public bool NeedKey()
+    {
+        return requiredKeys.Length > 0;
     }
 
     public void Open()
