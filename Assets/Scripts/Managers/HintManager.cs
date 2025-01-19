@@ -16,8 +16,6 @@ public class HintManager : MonoBehaviour
     public TMP_Text hintTextUI;
     public TMP_Text hintKeyUI;
 
-    public FatherMovement fatherMovement;
-
     void Awake()
     {
         if (Instance != null)
