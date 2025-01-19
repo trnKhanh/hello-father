@@ -993,7 +993,6 @@ MonoBehaviour:
   hintPanelUI: {fileID: 1429676533950250496}
   hintTextUI: {fileID: 3027420009978639096}
   hintKeyUI: {fileID: 5558846355085009327}
-  fatherMovement: {fileID: 0}
 --- !u!114 &6948749523893402689
 MonoBehaviour:
   m_ObjectHideFlags: 0
