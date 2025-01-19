@@ -596,21 +596,31 @@ MonoBehaviour:
 
 
 
-    SOUND AND MUSIC
+    GRAPHIC
+
+    Loi Minh Duong
+
+
+
+
+    SOUND
+    AND MUSIC
+
+    Nam-Khanh Tran
+
+    Dac-Phu Phan Le
+
+
+
+
+    QUALITY ASSURANCE
 
     Nam-Khanh
     Tran
 
     Dac-Phu Phan Le
 
-
-
-    QUALITY ASSURANCE
-
-    Dac-Phu Phan Le
-
-    Loi
-    Minh Duong
+    Loi Minh Duong
 
 
 
@@ -621,8 +631,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 891c52f28d9904e2d80509b7795dd576, type: 2}
+  m_sharedMaterial: {fileID: -8447401110457799409, guid: 891c52f28d9904e2d80509b7795dd576, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
