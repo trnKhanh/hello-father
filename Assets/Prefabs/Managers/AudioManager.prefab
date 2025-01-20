@@ -64,7 +64,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 15346c1e18ab34f9ca951e72c41ca818, type: 3}
   backgroundAudioSource: {fileID: 4886213126677040739}
   sfxAudioSource: {fileID: 1507524034192129013}
-  defaultBackgroundMusic: 1
+  defaultBackgroundMusic: 0
 --- !u!1 &5478959079437405610
 GameObject:
   m_ObjectHideFlags: 0

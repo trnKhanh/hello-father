@@ -219,6 +219,7 @@ public class FatherMovement : MonoBehaviour, IGameData
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Father:OnTriggerEnter");
         if (other.gameObject == player.gameObject)
         {
             if (hostile)
@@ -227,6 +228,7 @@ public class FatherMovement : MonoBehaviour, IGameData
 
         if (other.gameObject.TryGetComponent<Door>(out Door door))
         {
+            Debug.Log("Open door");
             if (!door.NeedKey())
                 door.Open();
         }

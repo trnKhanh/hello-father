@@ -20,7 +20,7 @@ public class SceneLoadingManager : MonoBehaviour, IGameData
     {
         Menu,
         Map1,
-        Map2,
+        Credit,
     }
 
     [Serializable]
