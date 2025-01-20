@@ -40,9 +40,11 @@ public class PlayerController : MonoBehaviour, IDamagable, IGameData
         FilterObject();
         if (interactableObjects.Count > 0)
         {
+            Debug.Log("InteractUI");
             GameObject interactable = ClosestInteractableObject();
 
             KeyCode interactKey = InputManager.Instance.InteractKey();
+            Debug.Log(interactKey);
             string description = interactable.GetComponent<IInteractable>().GetDescription();
             if (description == null)
                 description = "Interact";
@@ -92,7 +94,10 @@ public class PlayerController : MonoBehaviour, IDamagable, IGameData
     {
         IInteractable interactable;
         if (other.TryGetComponent<IInteractable>(out interactable))
+        {
+            Debug.Log("Interact");
             interactableObjects.Add(other.gameObject);
+        }
     }
 
     void OnTriggerExit(Collider other)

@@ -34,6 +34,11 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (InventoryManager.Instance.HasAnyKey(requiredKeys))
         {
+            if (isClosed)
+                PlayOpenSound();
+            else
+                PlayCloseSound();
+                    
             isClosed = !isClosed;
             animator.SetTrigger(k_interact);
         } else
