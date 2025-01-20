@@ -16,7 +16,7 @@ public class Door : MonoBehaviour, IInteractable
     public string description = "Open door";
 
     bool isClosed = true;
-    public bool canOpened;
+    public bool canOpened = true;
 
     Animator animator;
     AudioSource audioSource;

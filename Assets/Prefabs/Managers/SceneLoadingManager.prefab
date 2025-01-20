@@ -48,4 +48,6 @@ MonoBehaviour:
   - sceneType: 0
     sceneName: Assets/Scenes/Menu.unity
   - sceneType: 1
-    sceneName: Assets/Scenes/CharacterController.unity
+    sceneName: Assets/Scenes/Gameplay.unity
+  - sceneType: 2
+    sceneName: Assets/Scenes/Credit.unity

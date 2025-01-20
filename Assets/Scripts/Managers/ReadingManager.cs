@@ -69,11 +69,14 @@ public class ReadingManager : MonoBehaviour
 
     void UpdateControlUI()
     {
-        prevButton.gameObject.SetActive(false);
+        prevButton.gameObject.SetActive(true);
         prevButton.onClick.RemoveListener(prevButton_onClick);
 
-        nextButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(true);
         nextButton.onClick.RemoveListener(nextButton_onClick);
+
+        Debug.Log("UpdateControlUI");
+        Debug.Log(currentReading);
 
         if (currentReading != null)
         {
@@ -85,6 +88,7 @@ public class ReadingManager : MonoBehaviour
 
             if (currentReading.CanGoToNextPage())
             {
+                Debug.Log("CanGoToNextPage");
                 nextButton.gameObject.SetActive(true);
                 nextButton.onClick.AddListener(nextButton_onClick);
             }
