@@ -16,6 +16,7 @@ public class Door : MonoBehaviour, IInteractable
     public string description = "Open door";
 
     bool isClosed = true;
+    public bool canOpened;
 
     Animator animator;
     AudioSource audioSource;
@@ -48,6 +49,9 @@ public class Door : MonoBehaviour, IInteractable
 
     public void Open()
     {
+        if (!canOpened)
+            return;
+
         if (isClosed)
         {
             Interact();
