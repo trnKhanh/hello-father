@@ -11,6 +11,8 @@ public class MenuUIManager : MonoBehaviour
     public Button newGameButton;
     public Button quitButton;
 
+    bool canContinue = false;
+
     string k_transition = "Transition";
 
     Animator animator;
@@ -24,11 +26,11 @@ public class MenuUIManager : MonoBehaviour
     {
         if (GameDataManager.Instance.HasSaveFile())
         {
-            continueButton.gameObject.SetActive(true);
+            canContinue = true;
         }
         else
         {
-            continueButton.gameObject.SetActive(false);
+            canContinue = false;
         }
 
         SubribeToButtonEvents();
@@ -45,6 +47,8 @@ public class MenuUIManager : MonoBehaviour
         {
             animator.SetTrigger(k_transition);
         }
+
+        continueButton.gameObject.SetActive(canContinue);
     }
 
     public void SubribeToButtonEvents()

@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5614953472460083570}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -385.0935, y: -535.0857, z: -2.3424687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -57,7 +57,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 477227379189857650, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 613248749531606184, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_UiScaleMode
@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5792564090183120060, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6252867335811243914, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_Pivot.x
@@ -233,7 +233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9023985155796273001, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9039252321403747384, guid: c441c9d274dd4774a91926261ac7ee89, type: 3}
       propertyPath: m_SizeDelta.x

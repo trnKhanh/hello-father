@@ -206,6 +206,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7118687541851520071, guid: 1d3f5079c836540c0a702bfa0c5deb39, type: 3}
+      propertyPath: nextScene
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7668813418660155837, guid: 1d3f5079c836540c0a702bfa0c5deb39, type: 3}
       propertyPath: m_Name
       value: SceneStateManager
@@ -1872,6 +1876,10 @@ PrefabInstance:
     - target: {fileID: 7421118036058095063, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7799202783646353620, guid: 8ce9f4da612ff4db98c4a393ed854088, type: 3}
+      propertyPath: m_SortingOrder
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

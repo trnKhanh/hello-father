@@ -42,6 +42,10 @@ public class CutsceneManager : MonoBehaviour, IGameData
         {
             cutscene.SetActive(false);
         }
+        foreach (GameObject gameObject in gameplayObjects)
+        {
+            gameObject.SetActive(false);
+        }
 
         currentCutscene = cutscenes[id];
         currentCutscene.SetActive(true);
@@ -49,6 +53,7 @@ public class CutsceneManager : MonoBehaviour, IGameData
 
     public void LoadNextCutscene()
     {
+        AudioManager.Instance.MuteBackGround();
         LoadCutscene(cutsceneData.cutsceneId++);
     }
 
@@ -64,6 +69,7 @@ public class CutsceneManager : MonoBehaviour, IGameData
         ControlManager.Instance.LockCursor();
 
         GameDataManager.Instance.Save();
+        AudioManager.Instance.UnMuteBackGround();
 
         if (cutsceneData.cutsceneId >= cutscenes.Length)
         {
@@ -86,12 +92,20 @@ public class CutsceneManager : MonoBehaviour, IGameData
         }
         catch (Exception e)
         {
+            cutsceneData.cutsceneId = 0;
             Debug.LogWarning(e);
         }
+        Debug.Log("Load Cutscene");
 
         if (cutsceneData.cutsceneId == 0)
         {
             LoadNextCutscene();
+        } else
+        {
+            foreach (GameObject gameObject in gameplayObjects)
+            {
+                gameObject.SetActive(true);
+            }
         }
     }
 }

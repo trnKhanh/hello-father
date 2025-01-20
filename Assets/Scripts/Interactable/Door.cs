@@ -32,7 +32,7 @@ public class Door : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (InventoryManager.Instance.HasAnyKey(requiredKeys))
+        if (InventoryManager.Instance.HasAnyKey(requiredKeys) && canOpened)
         {
             if (isClosed)
                 PlayOpenSound();

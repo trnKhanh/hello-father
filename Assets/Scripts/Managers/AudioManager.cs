@@ -86,6 +86,17 @@ public class AudioManager : MonoBehaviour
         sfxAudioSource.PlayOneShot(audioClip);
     }
 
+    public void MuteBackGround()
+    {
+        Debug.Log("MuteBackGround");
+        backgroundAudioSource.mute = true;
+    }
+
+    public void UnMuteBackGround()
+    {
+        backgroundAudioSource.mute = false;
+    }
+
     private AudioClip GetSFXAudioClip(SFXState state)
     {
         foreach (SFXAudioClip clip in sfxAudioClips)
