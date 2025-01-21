@@ -65,8 +65,6 @@ public class GameDataManager : MonoBehaviour
         string savePath = Path.Join(Application.persistentDataPath, saveFileName);
 
         string sceneSaveFile = Path.Join(savePath, "scene.json");
-        Debug.LogError(sceneSaveFile);
-        Debug.LogError(File.Exists(sceneSaveFile));
 
         return File.Exists(sceneSaveFile);
     }

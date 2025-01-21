@@ -11,6 +11,7 @@ public class ControlManager : MonoBehaviour
     public bool startPausing = false;
 
     public List<Canvas> openedTabs { get; private set; } = new List<Canvas>();
+    Canvas tabsToClose;
     public int frameOpenedTabs { get; private set; } = 0;
 
     void Awake()
@@ -41,17 +42,25 @@ public class ControlManager : MonoBehaviour
         frameOpenedTabs = openedTabs.Count;
     }
 
+    private void LateUpdate()
+    {
+        if (tabsToClose)
+        {
+            openedTabs.Remove(tabsToClose);
+            tabsToClose = null;
+        }
+    }
+
     public void PushTab(Canvas tab)
     {
         openedTabs.Add(tab);
-        Debug.Log(openedTabs.Count);
     }
 
     public bool PopTab(Canvas tab)
     {
-        if (openedTabs.Count > 0 && openedTabs[openedTabs.Count - 1] == tab)
+        if (tabsToClose == null && openedTabs.Count > 0 && openedTabs[openedTabs.Count - 1] == tab)
         {
-            openedTabs.Remove(tab);
+            tabsToClose = tab;
             return true;
         }
 

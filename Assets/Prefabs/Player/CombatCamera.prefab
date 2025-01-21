@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2216139055793270862}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2916285, y: 0.21919604, z: -0.068844154, w: 0.9285292}
+  m_LocalRotation: {x: 0.3255073, y: 0, z: 0, w: 0.94553953}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -234,17 +234,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 193
-  m_IgnoreTag: 
+    m_Bits: 4294967295
+  m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_MinimumDistanceFromTarget: 0.1
+  m_MinimumDistanceFromTarget: 0.01
   m_AvoidObstacles: 1
   m_DistanceLimit: 0
   m_MinimumOcclusionTime: 0
-  m_CameraRadius: 0.2
-  m_Strategy: 1
+  m_CameraRadius: 0.01
+  m_Strategy: 0
   m_MaximumEffort: 4
   m_SmoothingTime: 0.1
   m_Damping: 0.5
@@ -402,7 +402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5444609821109849223}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.27241397, y: 0.22056942, z: -0.06430822, w: 0.934347}
+  m_LocalRotation: {x: 0.30593473, y: 0, z: 0, w: 0.95205253}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -735,7 +735,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7433591945004292814}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.31078413, y: 0.21772417, z: -0.07336619, w: 0.9222943}
+  m_LocalRotation: {x: 0.34500778, y: 0, z: 0, w: 0.9385998}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

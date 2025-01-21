@@ -17,6 +17,8 @@ public class FatherMovement : MonoBehaviour, IGameData
         public Vector3 destination;
         public bool isIdle;
         public bool isChasing;
+        public float reachingTargetTimeout;
+        public float idleTimer;
     }
 
     [Header("Target")]
@@ -252,6 +254,8 @@ public class FatherMovement : MonoBehaviour, IGameData
         fatherData.destination = agent.destination;
         fatherData.isIdle = isIdle;
         fatherData.isChasing = isChasing;
+        fatherData.reachingTargetTimeout = reachingTargetTimeout;
+        fatherData.idleTimer = idleTimer;
 
         Debug.Log(String.Format("Save father to {0}", savePath));
         File.WriteAllText(savePath, JsonUtility.ToJson(fatherData));
@@ -269,6 +273,9 @@ public class FatherMovement : MonoBehaviour, IGameData
 
             isIdle = fatherData.isIdle;
             isChasing = fatherData.isChasing;
+
+            reachingTargetTimeout = fatherData.reachingTargetTimeout;
+            idleTimer = fatherData.idleTimer;
 
             if (isIdle)
             {
